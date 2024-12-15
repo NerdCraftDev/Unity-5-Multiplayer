@@ -34,7 +34,7 @@ public class LobbyManager : MonoBehaviour
     private LobbySettings pendingLobbySettings;
     private Queue<string> chatMessages = new Queue<string>(10); // Keep last 10 messages
 
-    private async void Start()
+    private async void Awake()
     {
         UIManager.Initialize(uiRoot);
         await InitializeUnityServices();
@@ -49,6 +49,9 @@ public class LobbyManager : MonoBehaviour
         try
         {
             await UnityServices.InitializeAsync();
+            
+            // Clear any existing authentication data
+            AuthenticationService.Instance.SignOut(true);
             
             for (int i = 0; i < maxRetries; i++)
             {
